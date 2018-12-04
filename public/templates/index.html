@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <script src="js/jquery-3.1.0.js"></script>
+    <script>
+
+        $(function(){
+            $('.lsl').on('click',function(){
+
+                $.getJSON('/lala',function(data){
+
+                   console.log(data);
+                    $('p').html(data.name);
+                });
+            });
+
+            $(".btn-primary").on("click",function(){
+                // 获得用户输入的搜索关键字 - 男装
+                var keyword = $("input[type='search']").val();
+
+                // 构建请求接口(url)
+                var url = "/search?kw=" + keyword;
+
+                // 发送ajax请求，并显示返回的搜索结果
+                $.getJSON(url,function(data){
+                    // data：{"status":"ok","result": products[keyword]}
+                    if(data.status == "ok"){
+
+                        var table=$('<table>');
+                        table.addClass('table');
+                        for(var i=0;i<data.result.length;i++){
+                            var tr=$('<tr>');
+                            for(var k in data.result[i]){
+                                $('<td>').append(k).appendTo(tr);
+                                $('<td>').append(data.result[i][k]).appendTo(tr);
+                            }
+                            tr.appendTo(table);
+                        };
+
+                        $("#box").html(table);
+
+
+                    }else if(data.status == "no"){
+                        $("#box").html("查无结果");
+                    }
+                });
+                return false;//jquery的return false既阻止了默认事件又阻止了冒泡事件
+
+            });
+        })
+    </script>
+</head>
+<body class="container">
+<div class="panel panel-primary">
+    <div class="panel-heading">随便什么</div>
+    <div class="panel-body">
+        <form class="form-horizontal">
+            <div class="input-group">
+                <input type="search" class="form-control"/>
+                <div class="input-group-btn">
+                    <button class="btn btn-primary ">搜索</button>
+
+                </div>
+
+            </div>
+        </form>
+
+        <div class=""  id="box">
+sdfd
+        </div>
+        <div class="lsl" >
+            搜索拉拉
+        </div>
+        <p></p>
+    </div>
+</div>
+</body>
+</html>

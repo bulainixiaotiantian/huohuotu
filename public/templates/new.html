@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <script src="js/jquery-3.1.0.js"></script>
+    <script>
+        $(function(){
+            // 响应搜索按钮
+            $(".btn").on("click",function(){
+                // 获得用户输入的搜索关键字 - 男装
+                var keyword = $("input[type='search']").val();
+
+                // 构建请求接口(url)
+                var url = "/search?kw=" + keyword;
+
+                // 发送ajax请求，并显示返回的搜索结果
+                $.getJSON(url,function(data){
+                    // data：{"status":"ok","result": products[keyword]}
+                    if(data.status == "ok"){
+                        $("#result").html(data.result[0].title);
+                    }else{
+                        $("#result").html("查无结果");
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body class="container">
+<div class="panel panel-primary">
+    <div class="panel-heading">站内搜索</div>
+    <div class="panel-body">
+        <input type="search" name="keyword" placeholder="请输入搜索关键字" size="60"/>
+        <button class="btn btn-primary">搜索</button>
+        <div class="well" id="result"></div>
+    </div>
+</div>
+</body>
+</html>
